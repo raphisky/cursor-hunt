@@ -1,0 +1,36 @@
+body {
+  margin:0;
+}
+
+#master-div {
+  display: block;
+}
+
+.search-zone {
+  margin: auto;
+  display: inline-block;
+  /*min-width: 15vw;
+  min-height: 15vh;*/
+  border: 1px dotted black;
+}
+
+#result {
+}
+
+.header {
+  padding: 10px;
+  position: fixed;
+  top:0;
+  left:0;
+  cursor: none;
+}
+
+#objective {
+  display: inline-block;
+  margin-left: 10px;
+  min-width: 40px;
+  min-height: 20px;;
+  padding: 10px;
+  border: 1px solid black;
+  z-index: 1000;
+}
