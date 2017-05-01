@@ -11,7 +11,7 @@ body {
   display: inline-block;
   /*min-width: 15vw;
   min-height: 15vh;*/
-  border: 1px dotted black;
+  /*border: 1px dotted black;*/
 }
 
 #result {
@@ -23,6 +23,19 @@ body {
   top:0;
   left:0;
   cursor: none;
+}
+
+#progress {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 32px;
+  height: 50px;
+  padding: 20px;
+}
+
+#progress-bars {
+  letter-spacing: 4px;
 }
 
 #objective {

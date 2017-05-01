@@ -3,7 +3,7 @@
 // var div = document.createElement('div');
 
 // load cursors
-var cursors = ['alias','all-scroll','auto','cell','context-menu','col-resize','copy','crosshair','e-resize','ew-resize','grab','help','move','n-resize','ne-resize','nesw-resize','ns-resize','nw-resize','nwse-resize','no-drop','not-allowed','pointer','progress','row-resize','s-resize','se-resize','sw-resize','text','vertical-text','w-resize','wait','zoom-in','zoom-out'];
+var cursors = ['alias','all-scroll','auto','cell','context-menu','col-resize','copy','crosshair','e-resize','ew-resize','help','move','n-resize','ne-resize','nesw-resize','ns-resize','nw-resize','nwse-resize','no-drop','not-allowed','pointer','progress','row-resize','s-resize','se-resize','sw-resize','text','vertical-text','w-resize','wait','zoom-in','zoom-out'];
 
 // var divAmount = 10; // number of zones to create on the page
 
@@ -48,7 +48,7 @@ function createDiv(m) {
   for (i = 0; i < m ; i++ ) {
     var divHeight = Math.sqrt((98*98)/ m) + 'vh';
     var divWidth = Math.sqrt((90*90)/ m) + 'vw';
-    var divBorderRadius = '50%';
+    var divBorderRadius = '0%';
     var div = document.createElement('div');
     div.style.height =  divHeight;
     div.style.width = divWidth;
@@ -60,7 +60,7 @@ function createDiv(m) {
   console.log(i + " divs in da place");
 };
 
-var level = 10;
+var level = 2;
 function newGame(level) {
   console.log("start new game " + level)
   divAmount = level * 2;
@@ -72,7 +72,6 @@ function newGame(level) {
 // Initialisation.
 newGame(level);
 
-
 // Check if the clicked zone corresponds to the appropriate cursor.
 
 $("body").click(function( event ) {
@@ -83,6 +82,7 @@ $("body").click(function( event ) {
   if (String(clickedCursor).valueOf() == String(cursorToFind).valueOf() && clickedDivId != "objective"  ) {
     document.getElementById('result').innerText = "thanks!";
     level += 1;
+    scoreUp(1); // needs a delay;
     newGame(level);
   }
   else if (String(clickedCursor).valueOf() == String(cursorToFind).valueOf() && clickedDivId == "objective") {
@@ -91,5 +91,34 @@ $("body").click(function( event ) {
   else {
     document.getElementById('result').innerText = "nope";
     console.log("cursor to find is still " + cursorToFind);
+    if (lastBarId) {
+      scoreDown(lastBarId);
+    }
   }
 });
+
+// Score
+
+
+var lastBarId;
+var highestScore = 0;
+
+function scoreUp(s) {
+    highestScore = highestScore + s;
+    var bar = document.createElement('span');
+    var barContent = "|";;
+    bar.innerText = barContent;
+    document.getElementById('progress-bars').appendChild(bar);
+    bar.setAttribute('id',highestScore);
+    lastBarId = bar.id;
+};
+
+function scoreDown(lastBarId) {
+  var targetBar = document.getElementById(lastBarId);
+  targetBar.style.opacity = 0.4;
+  if (lastBarId > 0) {
+    lastBarId = lastBarId - 1;
+    console.log(lastBarId);
+  }
+  return lastBarId;
+};
