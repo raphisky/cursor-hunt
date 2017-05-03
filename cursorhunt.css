@@ -11,7 +11,7 @@ body {
   display: inline-block;
   /*min-width: 15vw;
   min-height: 15vh;*/
-  /*border: 1px dotted black;*/
+  /* border: 1px dotted black;*/
 }
 
 #result {
@@ -36,6 +36,10 @@ body {
 
 #progress-bars {
   letter-spacing: 4px;
+}
+
+#mission a {
+  font-size: 8px;
 }
 
 #objective {

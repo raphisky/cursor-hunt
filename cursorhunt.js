@@ -7,25 +7,28 @@ var cursors = ['alias','all-scroll','auto','cell','context-menu','col-resize','c
 
 // var divAmount = 10; // number of zones to create on the page
 
-// choose a random cursor
-var randomCursor;
-function randomizeCursor(a) {
-  var randomCursor = cursors[Math.floor(Math.random() * cursors.length)];
-  return randomCursor;
+function shuffleCursors(cursorArray) {
+  var ctr = cursorArray.length, temp, index;
+  while (ctr > 0) {
+    index = Math.floor(Math.random() * ctr);
+    ctr --;
+    temp = cursorArray[ctr];
+    cursorArray[ctr] = cursorArray[index];
+    cursorArray[index] = temp;
+  }
+  return cursorArray;
 };
 
 // Load availableCursors
 
-var cursorToAdd;
-var n; // number of cursors wanted
-var j;
 var availableCursors = []; // where cursors generated will be stored
 
 function filterCursors(n) {
-  for (j=0; j < n ;j++) {
-    cursorToAdd = randomizeCursor();
+  for (var j=0; j < n ;j++) {
+    shuffleCursors(cursors);
+    var cursorToAdd = cursors[j];
     availableCursors.push(cursorToAdd);
-    console.log(availableCursors[j]);
+    console.log(j +" "+availableCursors[j]);
   };
   return availableCursors;
 };
@@ -33,21 +36,18 @@ function filterCursors(n) {
 // Set a cursor as the objective
 var cursorToFind;
 var cursorToFindDisplay = document.getElementById("objective");
-var e;
 function setCursorToFind(e) {
   cursorToFind = e[Math.floor(Math.random() * e.length)];
   cursorToFindDisplay.innerText = cursorToFind;
   cursorToFindDisplay.style.cursor = cursorToFind;
   console.log("cursor to find is " + cursorToFind);
-  return String(cursorToFind);
+  return cursorToFind;
 };
 
-var i;
-var m;
 function createDiv(m) {
-  for (i = 0; i < m ; i++ ) {
-    var divHeight = Math.sqrt((98*98)/ m) + 'vh';
-    var divWidth = Math.sqrt((90*90)/ m) + 'vw';
+  for (var i = 0; i < m ; i++ ) {
+    var divHeight = Math.sqrt((98*98)/ m) + 'vh'; // FIXME
+    var divWidth = Math.sqrt((90*90)/ m) + 'vw'; // FIXME
     var divBorderRadius = '0%';
     var div = document.createElement('div');
     div.style.height =  divHeight;
@@ -60,33 +60,34 @@ function createDiv(m) {
   console.log(i + " divs in da place");
 };
 
-var level = 2;
-function newGame(level) {
-  console.log("start new game " + level)
-  divAmount = level * 2;
-  availableCursors = filterCursors(divAmount);
-  setCursorToFind(availableCursors);
-  createDiv(divAmount);
-}
 
-// Initialisation.
-newGame(level);
+function clearDivs(id) {
+  var o = document.getElementById(id).childElementCount;
+  var dump = document.getElementById(id).childNodes;
+  var oldDivs = document.getElementById(id);
+  for (var i = 0; i < o; i++) {
+    oldDivs.removeChild(oldDivs.childNodes[0]);
+  }
+  console.log("divs have been cleared");
+  return true;
+}
 
 // Check if the clicked zone corresponds to the appropriate cursor.
 
 $("body").click(function( event ) {
   var clickedCursor = event.target.style.cursor;
   var clickedDivId = event.target.id; // prevents from winning when clicking on the result box;
-  console.log(clickedDivId)
   console.log("tu as cliqué " + clickedCursor + " (objectif : " + cursorToFind +" )");
   if (String(clickedCursor).valueOf() == String(cursorToFind).valueOf() && clickedDivId != "objective"  ) {
-    document.getElementById('result').innerText = "thanks!";
     level += 1;
     scoreUp(1); // needs a delay;
     newGame(level);
   }
   else if (String(clickedCursor).valueOf() == String(cursorToFind).valueOf() && clickedDivId == "objective") {
     document.getElementById('result').innerText = "lol nice try";
+    scoreUp(1);
+    level += 1;
+    newGame(level);
   }
   else {
     document.getElementById('result').innerText = "nope";
@@ -99,12 +100,11 @@ $("body").click(function( event ) {
 
 // Score
 
-
-var lastBarId;
-var highestScore = 0;
-
+var lastBarId, highestScore = 0;
 function scoreUp(s) {
     highestScore = highestScore + s;
+    console.log("score up, score is now : "+ highestScore);
+    document.getElementById('result').innerText = "thanks!";
     var bar = document.createElement('span');
     var barContent = "|";;
     bar.innerText = barContent;
@@ -122,3 +122,17 @@ function scoreDown(lastBarId) {
   }
   return lastBarId;
 };
+
+
+var level = 5;
+function newGame(level) {
+  clearDivs("master-div");
+  console.log("start new game " + level);
+  availableCursors = filterCursors(level);
+  cursorToFind = setCursorToFind(availableCursors);
+  createDiv(level);
+  return cursorToFind;
+}
+
+// Initialisation.
+newGame(level);
