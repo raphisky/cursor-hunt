@@ -19,6 +19,18 @@ function shuffleCursors(cursorArray) {
   return cursorArray;
 };
 
+// initialize isotope grid
+$('.grid').isotope({
+  // options
+  itemSelector: '.search-zone',
+  layoutMode: 'masonryHorizontal',
+  masonryHorizontal: {
+  rowHeight: 100,
+  gutter: 0
+}
+});
+
+
 // Load availableCursors
 
 var availableCursors = []; // where cursors generated will be stored
@@ -28,7 +40,7 @@ function filterCursors(n) {
     shuffleCursors(cursors);
     var cursorToAdd = cursors[j];
     availableCursors.push(cursorToAdd);
-    console.log(j +" "+availableCursors[j]);
+    console.log(j +" "+availableCursors[j] + " / " + availableCursors.length);
   };
   return availableCursors;
 };
@@ -50,8 +62,8 @@ function createDiv(m) {
     var divWidth = Math.sqrt((90*90)/ m) + 'vw'; // FIXME
     var divBorderRadius = '0%';
     var div = document.createElement('div');
-    div.style.height =  divHeight;
-    div.style.width = divWidth;
+    //div.style.height =  divHeight;
+    //div.style.width = divWidth;
     div.style.borderRadius = divBorderRadius;
     div.style.cursor = availableCursors[i];
     document.getElementById("master-div").appendChild(div);
@@ -69,6 +81,15 @@ function clearDivs(id) {
     oldDivs.removeChild(oldDivs.childNodes[0]);
   }
   console.log("divs have been cleared");
+  $('.grid').isotope({
+    // options
+    itemSelector: '.search-zone',
+    layoutMode: 'masonryHorizontal',
+    masonryHorizontal: {
+    rowHeight: 100,
+    gutter: 0
+  }
+  });
   return true;
 }
 
@@ -84,9 +105,8 @@ $("body").click(function( event ) {
     newGame(level);
   }
   else if (String(clickedCursor).valueOf() == String(cursorToFind).valueOf() && clickedDivId == "objective") {
-    document.getElementById('result').innerText = "lol nice try";
-    scoreUp(1);
     level += 1;
+    scoreUp(1); // needs a delay;
     newGame(level);
   }
   else {
@@ -124,12 +144,13 @@ function scoreDown(lastBarId) {
 };
 
 
-var level = 5;
+var level = 1;
 function newGame(level) {
+  availableCursors = [];
   clearDivs("master-div");
   console.log("start new game " + level);
   availableCursors = filterCursors(level);
-  cursorToFind = setCursorToFind(availableCursors);
+  setCursorToFind(availableCursors);
   createDiv(level);
   return cursorToFind;
 }

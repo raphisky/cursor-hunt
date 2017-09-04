@@ -11,7 +11,11 @@ body {
   display: inline-block;
   /*min-width: 15vw;
   min-height: 15vh;*/
-  /* border: 1px dotted black;*/
+  border: 1px dotted black;
+  min-width: 200px;
+  min-height: 100px;
+  width: auto;
+  height: auto;
 }
 
 #result {
@@ -40,6 +44,7 @@ body {
 
 #mission a {
   font-size: 8px;
+  display: none;
 }
 
 #objective {
